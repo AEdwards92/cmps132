@@ -19,7 +19,7 @@
 
 \newcommand{\thiscoursecode}{CMPS132}
 \newcommand{\thiscoursename}{Computability and Complexity Theory}
-\newcommand{\thisprof}{Seshadhri Comandur}
+\newcommand{\thisprof}{Dr. Seshadhri Comandur}
 \newcommand{\me}{Andrew Edwards}
 \newcommand{\thisterm}{(Spring) 2015}
 \newcommand{\website}{https://users.soe.ucsc.edu/~sesh/cmps132-15/cmps132-15.html}
@@ -39,6 +39,8 @@
 \textbf{\Huge{\noun{\thiscoursecode}}}{\Huge \par}
 
 {\large{\noun{\thiscoursename}}}\\ \vspace{0.1in}
+
+{Notes by: {\noun \me}} \\\vspace{0.1in}
 
   {\noun \thisprof} \ $\bullet$ \ {\noun \thisterm} \ $\bullet$ \ {\noun {UC Santa Cruz}} \\
 
@@ -74,26 +76,11 @@
   As we will see, the physical ability to harness the power of computation
   is constrained by a purely mathematical result. \n
 
-  ``But wait!'' you may be thinking. ``What is computation, anyway?'' \n
+  But what exactly do we mean by computation? \n
 
-  Ian Horswill, a computer scientist at Northwestern, taught an introductory
-  programming course and wrote a small set of notes to introduce students
-  to computation. The unpublished notes are titled {\it
-  \href{http://www.cs.northwestern.edu/~ian/What%20is%20computation.pdf}
-  {What is Computation?}}, and in them he gives the following first 
-  approximation toward defining computation:
-
-  \begin{quote}
-  ``While we still don't know what computation is in the abstract, we can at
-    least say something about what we mean by a computational problem. It's
-    a group of related questions, each of which has a corresponding desired
-    answer. We'll call the information in the specific question the {\bf 
-    input} value(s) and the desired answer the {\bf output} value. For any
-    input, there is a corresponding desired output. The notions of input and
-    output are the most basic concepts of computation: \ul{computation is} -
-    for the moment - \ul{the process of deriving the desired
-    output from a given input(s)}.''
-  \end{quote}
+  For now, we appeal to intuition. Computation is the process of taking a
+  set of {\bf inputs} to an {\bf output}, following some well-defined 
+  sequence of steps. The description of these steps is called an {\bf algorithm}. \n
 
   Computation is the mechanism of transforming information, via some specific
   set of rules. Hitherto we have not defined {\it what form} this set
@@ -101,12 +88,8 @@
   For now, we simply assume that the input is {\bf finite} and that the
   description for how the computation proceeds is also finite. \n
 
-  It turns out that the requirement that computer's description be finite
-  immediately leads to the following theorem:
-  \begin{thrm} There exist problems unsolvable by computation.
-  \end{thrm}
-  Before proving this result, it is worth looking at the origin of the 
-  question, ``What are the limits of computation?'' \n
+
+  At this point, a natural question is, ``What are the limits of computation?'' 
   \subsection{Hilbert's 23 Problems and Hilbert's Program}
   David Hilbert was a prominent mathematician of the late nineteenth and
   early twentieth century. His research areas included functional analysis,
@@ -131,7 +114,7 @@
   Pythagorean equation. We can parametrize all solutions by the set
   \footnote{See Chapter 0 of Allen Hatcher's {\it 
   \href{http://www.math.cornell.edu/~hatcher/TN/TNpage.html}
-       {Topology of Numbers} } for a beautiful exposition of this result.}
+       {Topology of Numbers} } for a great exposition of this result.}
   \[ \{ (x, y, z) = (p^2 - q^2, 2pq, p^2 + q^2) : p, q \in \mathbb{Z}, p > q
   \}. \]
   However, for all $n > 2$, this Diophantine equation has no solutions. This
@@ -153,12 +136,19 @@
   have to trust the mathematical community on the validity of this result.
   \n
 
-  However, it is not hard to show that there exist unprovable problems.
+  Knowing that Hilbert's tenth problem cannot be solved by an algorithm,
+  we have our first theorem:
+  \begin{thrm}
+      There exist problems unsolveable by computation.
+  \end{thrm}
+  We will not be able to prove this result just yet; we will come back to
+  it in Chapter 2. However, given a specific model of computation, it's to
+  not too hard to concoct an unsolveable problem.
   \subsection{Computing Functions}
   Consider the following set of functions
-  \[ \mathcal{F} = \{ f : \mathbb{N} \rightarrow \mathbb{N} \} \]
-  In English, $\mathcal{F}$ is the set of all functions between natural
-  numbers \(\mathbb{N} = \{0, 1, \dots \} \).
+  \[ \mathcal{F} = \{ f | f : \mathbb{N} \rightarrow \{0,1\} \} \]
+  In English, $\mathcal{F}$ is the set of all functions mapping each natural
+  numbers \(\mathbb{N} = \{0, 1, \dots \} \) to either zero or one.
   Now, suppose we pick a specific function $f \in \mathcal{F}$. Can we
   compute $f$? \n
 
@@ -169,13 +159,15 @@
   with formality. Let's pick a familiar, powerful model of computation:
   $\pC$ programs. \n
 
-  For example, consider the function \(f(n) = n^2\), and consider the 
-  following $\pC$ function, which we'll call \texttt{f.c}.
+  As an example, consider the function 
+  \[f(n) = \begin{cases} 0 & \text{if $n$ is even} \\
+                         1 & \text{if $n$ is odd} \end{cases}\]
+  The following $\pC$ function, which we'll call \texttt{f.c}.
   \begin{lstlisting}
   #include <stdio.h>
   int main(int argc, char** argv) {
       int n = argc - 1;
-      printf(``%d'', n * n);
+      printf(``%d'', n % 2);
   }
   \end{lstlisting}
   Here is the result of compiling and running this program on a Unix machine:
@@ -186,21 +178,21 @@
   $ ./f 1
     1
   $ ./f 1 1
-    4
+    0
   $ ./f 1 1 1
-    9
+    1
   \end{lstlisting}
-  So our program $\texttt{f.c}$ can compute $f(n) = n^2$ by passing in 
+  So our program $\texttt{f.c}$ can compute $f(n)$ by passing in 
   $n$ space separated arguments to the compiled program. To keep it simple we
   can use a space separated unary encoding of $n$. We can alter this program
   in a virtually unlimited number of ways to compute other functions, such
-  as $g(n) = \lfloor n/2 \rfloor$, $h(n) = \min(100 - n, 0)$, and 
-  $p(n) = $ the $n^{th}$ prime number.\n
+  as $g(n) = 1$ if $n$ is odd, $h(n) = 1$ if $n$ is greater than $42$, and 
+  $p(n) = 1$ if $n$ is a prime number.\n
 
   Does every function $f \in \mathcal{F}$ have a corresponding program 
   \texttt{f.c}? We are about to see that the answer is no, which leads us
   to
-  \begin{thrm} There exist a function $f \in \mathcal{F}$ such that no
+  \begin{thrm} There exists a function $f \in \mathcal{F}$ such that no
                $\pC$ program computes $f$.
   \end{thrm}
   Note the difference between Theorem 1.1 and Theorem 1.2. The first claims
@@ -221,10 +213,11 @@
   the string with \texttt{gcc}. We keep all programs that compile and,
   when run via 
   \texttt{./f} $\underbrace{\texttt{1 1}\dots\texttt{1}}_{n}$, print out
-  a number. We can just discard those that don't.\footnote{If you are worried
-  about printing out non-numbers, we can change our model (or our 
-  $\pC$ compiler) to only allow \texttt{printf(``\%d'', n)} print
-  statements.} \n
+  zero or one. We can just discard those that don't.\footnote{If you are worried
+  about the program printing stuff other than zero or one, we can change our model 
+  to only allow \texttt{printf(``0'')} and \texttt{printf(``1'')} print statements. Or
+  we could interpret any character that is not \texttt{0} to correspond to a \texttt{1}.
+  Our intention is not to be overly technical or pedantic at this point.} \n
 
   We will eventually list all valid programs in our model. Let's label
   the program as \texttt{f\_0.c}, \texttt{f\_1.c}, \dots For each program
@@ -234,20 +227,21 @@
 \begin{tabular}{c|c|c|c|c}
 $n$             & $0$   & $1$   & $2$   & \dots \\
 \hline
-$f_0(n)$ & $0$   & $1$   & $2$   & \dots \\
+$f_0(n)$ & $0$   & $0$   & $0$   & \dots \\
 \hline
-$f_1(n)$ & $1$   & $4$   & $9$   & \dots \\
+$f_1(n)$ & $1$   & $0$   & $1$   & \dots \\
 \hline
-$f_2(n)$ & $111$ & $112$ & $113$ & \dots \\
+$f_2(n)$ & $1$ & $1$ & $0$ & \dots \\
 \hline
 \vdots & \vdots & \vdots & \vdots & $\ddots$
 \end{tabular}
 \]
   Now, consider the following function:
-  \[ f(n) = f_n(n) + 1 \]
+  \[ f(n) = 1 - f_n(n) \]
   This is a well defined function. Given $n$, we can find the $n^{th}$ $\pC$
-  program \texttt{f\_n.c} and compute $f_n(n)$. Adding \(1\) gives us $f(n)$.
-  So, where does $f$ appear in our list?\n
+  program \texttt{f\_n.c} and compute $f_n(n)$. Then $1 - f_n(n)$ gives us $f(n)$.\n
+
+  The question is, does $f$ appear in our list?\n
 
   This is the crux of the proof: $f$ {\it does not} appear in the list. 
   It disagrees with every function in the list on where to map the input
@@ -256,8 +250,34 @@ $f_2(n)$ & $111$ & $112$ & $113$ & \dots \\
 
   This proves Theorem 1.2.
   \end{proof}
+  The argument above is called a {\bf diagonal argument}, and its origins
+  trace back to the German mathematician Georg Cantor. In 1891 he proved
+  that there is no bijection between the set $T$ of all infinite binary 
+  sequences and the set of natural numbers. Following this style of reasoning,
+  one can show that there is no bijection between the set of real numbers
+  and the set of natural numbers, and that there is no bijection between the
+  natural numbers and the set of all subsets of natural numbers. \n
+
+  \subsection{A Look Ahead}
+  TODO
+
   \section{Computational Models}
-  \subsection{``\pC'' Programs}
+  In this chapter we will explore three models of computation. The first
+  we will call $\pC$ programs. In reality, we will only need a very 
+  limited subset of the language, which is the first surprise of computability
+  theory:
+  \[ \textbf{1. }\textit{Few rules give rise to all computation.} \]
+  The second model is the Turing Machine. We assume the reader has seen
+  Turing Machines before, but we will review the notation and the semantics.
+  The third model is called $\mu$-Recursive functions. If you have ever
+  programmed in a functional programming language, then this formalism will
+  be familiar. Unlike $\pC$ programs and Turing Machines, $\mu$-Recursive
+  functions operate exclusively on natural numbers. \n
+
+  On the surface, these three models seem to be very different. This brings
+  us to the second surprise of computability theory:
+  \[ \textbf{2. } \textit{All models of computation are equivalent.} \]
+  \subsection{``\pC\,'' Programs}
   \subsection{Turing Machines}
   \subsection{$\mu$-Recursive Functions}
   \subsection{Church-Turing Thesis}
