@@ -101,8 +101,8 @@
   For now, we simply assume that the input is {\bf finite} and that the
   description for how the computation proceeds is also finite. \n
 
-  Perhaps surprisingly, these basic assumptions already allow us to state
-  and prove our first result: 
+  It turns out that the requirement that computer's description be finite
+  immediately leads to the following theorem:
   \begin{thrm} There exist problems unsolvable by computation.
   \end{thrm}
   Before proving this result, it is worth looking at the origin of the 
@@ -138,8 +138,7 @@
   fact is known as Fermat's Last Theorem, and took mathematicians centuries
   to prove (it was finally proven by Andrew Wiles in 1994). Similarly, the
   (somewhat trivial) example \(x^2 + 1 = 0\) has no integer solutions. So 
-  clearly some Diophantine equations have solutions and some do not. \n
-
+  clearly some Diophantine equations have solutions and some do not.
   Hilbert's tenth problem asks for an algorithm that takes as input a 
   Diophantine equation an returns (say) ``TRUE'' if a solution exists and
   ``FALSE'' otherwise. \n
