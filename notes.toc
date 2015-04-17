@@ -1,0 +1,10 @@
+\select@language {english}
+\contentsline {section}{\numberline {1}Introduction}{1}{section.1}
+\contentsline {subsection}{\numberline {1.1}What is Computation?}{1}{subsection.1.1}
+\contentsline {subsection}{\numberline {1.2}Hilbert's 23 Problems and Hilbert's Program}{2}{subsection.1.2}
+\contentsline {subsection}{\numberline {1.3}Computing Functions}{3}{subsection.1.3}
+\contentsline {section}{\numberline {2}Computational Models}{4}{section.2}
+\contentsline {subsection}{\numberline {2.1}``{\texttt {C}}'' Programs}{4}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Turing Machines}{4}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}$\mu $-Recursive Functions}{4}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.4}Church-Turing Thesis}{4}{subsection.2.4}
