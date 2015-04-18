@@ -277,7 +277,35 @@ $f_2(n)$ & $1$ & $1$ & $0$ & \dots \\
   On the surface, these three models seem to be very different. This brings
   us to the second surprise of computability theory:
   \[ \textbf{2. } \textit{All models of computation are equivalent.} \]
+  
   \subsection{``\pC\,'' Programs}
+  The first surprise of computability theory is that only a few rules
+  are required to acheive the full power of computation. We demonstrate
+  that in this chapter. \n
+
+  The syntax of our first model is very simple. All programs have the 
+  following form: 
+  \begin{itemize}
+      \item Each take a fixed number of inputs $x_1, x_2, \dots, x_k$,
+            give a single output $y$, and have access to a fixed number
+            of temporary variables $z_1, z_2, \dots, z_n$. 
+      \item All input, ouput, and temporary variables are natural numbers.
+      \item The following two operations are valid on any variables:
+          \begin{enumerate}
+              \item $\inc{v}$, which increments the variable $v$.
+              \item $\dec{v}$, which decrements the variable $v$, except at zero, 
+                whence $\inc{v})_{v=0} = 0$.
+          \end{enumerate}
+      \item The description of a program is a sequence of instructions,
+            which is either an operation on a variable or the following
+            conditional branch:
+            \[ \text{If } v = 0 \text{, then go to instruction } n
+            \text{. Else, continue.} \]
+  \end{itemize}
+  Here is an example program,
+  \begin{lstlisting}
+  
+  \end{lstlisting}
   \subsection{Turing Machines}
   \subsection{$\mu$-Recursive Functions}
   \subsection{Church-Turing Thesis}
