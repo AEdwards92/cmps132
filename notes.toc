@@ -6,6 +6,6 @@
 \contentsline {subsection}{\numberline {1.4}A Look Ahead}{4}{subsection.1.4}
 \contentsline {section}{\numberline {2}Computational Models}{5}{section.2}
 \contentsline {subsection}{\numberline {2.1}``{\texttt {C}}\tmspace +\thinmuskip {.1667em}'' Programs}{5}{subsection.2.1}
-\contentsline {subsection}{\numberline {2.2}Turing Machines}{5}{subsection.2.2}
-\contentsline {subsection}{\numberline {2.3}$\mu $-Recursive Functions}{5}{subsection.2.3}
-\contentsline {subsection}{\numberline {2.4}Church-Turing Thesis}{5}{subsection.2.4}
+\contentsline {subsection}{\numberline {2.2}Turing Machines}{6}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}$\mu $-Recursive Functions}{6}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.4}Church-Turing Thesis}{6}{subsection.2.4}
