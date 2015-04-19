@@ -82,7 +82,7 @@
   set of {\bf inputs} to an {\bf output}, following some well-defined 
   sequence of steps. The description of these steps is called an {\bf algorithm}. \n
 
-  Computation is the mechanism of transforming information, via some specific
+  Computation is the mechanism of transforming information via some specific
   set of rules. Hitherto we have not defined {\it what form} this set
   of rules may take, nor have we even defined what form the input can take.
   For now, we simply assume that the input is {\bf finite} and that the
@@ -148,7 +148,7 @@
   Consider the following set of functions
   \[ \mathcal{F} = \{ f | f : \mathbb{N} \rightarrow \{0,1\} \} \]
   In English, $\mathcal{F}$ is the set of all functions mapping each natural
-  numbers \(\mathbb{N} = \{0, 1, \dots \} \) to either zero or one.
+  number \(n \in \mathbb{N} = \{0, 1, \dots \} \) to either zero or one.
   Now, suppose we pick a specific function $f \in \mathcal{F}$. Can we
   compute $f$? \n
 
@@ -288,23 +288,40 @@ $f_2(n)$ & $1$ & $1$ & $0$ & \dots \\
   \begin{itemize}
       \item Each take a fixed number of inputs $x_1, x_2, \dots, x_k$,
             give a single output $y$, and have access to a fixed number
-            of temporary variables $z_1, z_2, \dots, z_n$. 
+            of temporary variables $z_1, z_2, \dots, z_n$. Temporary variables
+            and output are initially zero.
       \item All input, ouput, and temporary variables are natural numbers.
       \item The following two operations are valid on any variables:
           \begin{enumerate}
               \item $\inc{v}$, which increments the variable $v$.
               \item $\dec{v}$, which decrements the variable $v$, except at zero, 
-                whence $\inc{v})_{v=0} = 0$.
+                whence $\dec{v})_{v=0} = 0$.
           \end{enumerate}
       \item The description of a program is a sequence of instructions,
             which is either an operation on a variable or the following
             conditional branch:
-            \[ \text{If } v = 0 \text{, then go to instruction } n
+            \[ \text{If } v \neq 0 \text{, then go to instruction } n
             \text{. Else, continue.} \]
   \end{itemize}
-  Here is an example program,
+  Suppose we want to write a program that copies one variable to another. We would also like the
+  input data to be unaltered at the end of the program. Given that all way can do is increment and 
+  decrement, we will have to modify the input data as we copy it. The way we ensure it is unaltered
+  at the end of the program is by also storing its value into a temporary variable, and then
+  copying it back. Observe,
   \begin{lstlisting}
-  
+ copy(x, y, z) {
+     dec(x)
+     inc(y)
+     inc(z)
+     if (x != 0)
+         goto 2
+     dec(y)
+     dec(z)
+     inc(x)
+     if (z != 0)
+         goto 8
+     dec(x)
+ }
   \end{lstlisting}
   \subsection{Turing Machines}
   \subsection{$\mu$-Recursive Functions}
