@@ -59,7 +59,6 @@
   \doabstract{TODO}
 
   \section{Introduction}
-  \subsection{What is Computation?}
   The various disciplines of computer science can roughly be split into
   those focusing primarily on application or and those focusing on theory. 
   We see the same division in most sciences: theoretical versus experimental
@@ -77,8 +76,9 @@
   As we will see, the physical ability to harness the power of computation
   is constrained by a purely mathematical result. \n
 
-  But what exactly do we mean by computation? \n
+  But what exactly do we mean by computation? 
 
+  \subsection{What is Computation?}
   For now, we appeal to intuition. Computation is the process of taking a
   set of {\bf inputs} to an {\bf output}, following some well-defined 
   sequence of steps. The description of these steps is called an {\bf algorithm}. \n
@@ -89,8 +89,21 @@
   For now, we simply assume that the input is {\bf finite} and that the
   description for how the computation proceeds is also finite. \n
 
+  Every computer you have ever used operates on these basic principles.
+  Program input is received through the keyboard and mouse, and potentially from
+  complex commands to fetch input data from storage or from the Internet.
+  Output can be displayed on a screen, written to a binary file, or ``piped''
+  into another program. Programs themselves come in a multitude of forms. 
+  A program is often written in a high level language like \texttt{Java},
+  \texttt{C}, or \texttt{Python}. Some other program then either interprets
+  (in the case of \texttt{Java} and \texttt{Python}) or compiles (in the case 
+  of \texttt{C}) the program, so that the high level commands get converted 
+  into a low level, machine executable form. \n
 
-  At this point, a natural question is, ``What are the limits of computation?'' 
+  The capabilities of modern computers are awesome. No human can claim
+  superiority to a computer in a game of checkers or chess. Physics and 
+  graphics engines generate strikingly realistic scenes and simulations.
+  What limits, if any, are there on what we can acheive via computation?
   \subsection{Hilbert's 23 Problems and Hilbert's Program}
   David Hilbert was a prominent mathematician of the late nineteenth and
   early twentieth century. His research areas included functional analysis,
@@ -333,7 +346,7 @@ $f_2(n)$ & $1$ & $1$ & $0$ & \dots \\
      dec(z)
      inc(x)
      if (z != 0)
-         goto 8
+         goto 10
      return
  }
   \end{lstlisting}
@@ -347,7 +360,7 @@ $f_2(n)$ & $1$ & $1$ & $0$ & \dots \\
    inc(y)             ||   (x, y, z) =  (9, 1, 0)
    inc(z)             ||   (x, y, z) =  (9, 1, 1)
    if (x != 0)        ||          9 != 0 is true 
-       goto 2         ||
+       goto 5         ||
    ...
    dec(x)             ||   (x, y, z) = (1, 9, 9)
    inc(y)             ||   (x, y, z) = (0, 10, 9)
@@ -356,7 +369,7 @@ $f_2(n)$ & $1$ & $1$ & $0$ & \dots \\
    dec(z)             ||   (x, y, z) = (0, 10, 9)
    inc(x)             ||   (x, y, z) = (1, 10, 9)
    if (z != 0)        ||          9 != 0 is true
-       goto 8         ||
+       goto 10        ||
    ...
    dec(z)             ||   (x, y, z) = (9, 10, 0)
    inc(x)             ||   (x, y, z) = (10, 10, 0)
