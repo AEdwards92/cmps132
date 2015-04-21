@@ -8,6 +8,7 @@
 \usepackage{concmath}
 \usepackage{soul}
 \usepackage{hyperref}
+\usetikzlibrary{chains,fit,shapes}
 \hypersetup{
     colorlinks=true,
     linkcolor=blue,
@@ -263,7 +264,12 @@ $f_2(n)$ & $1$ & $1$ & $0$ & \dots \\
 
   \section{Computational Models}
   In this chapter we will explore three models of computation. The first
-  we will call $\pC$ programs. In reality, we will only need a very 
+  we will call $\mathcal{C}$ programs. $\mathcal{C}$ programs are like \pC 
+  programs, but they have a much more limited syntax. Each $\mathcal{C}$
+  operation has an analogous \pC operation, but not the other way around.
+  In fact, there are only {\it three} basic operations $\mathcal{C}$, but as we will 
+  see, it is just as powerful as \pC.
+   
   limited subset of the language, which is the first surprise of computability
   theory:
   \[ \textbf{1. }\textit{Few rules give rise to all computation.} \]
@@ -278,12 +284,12 @@ $f_2(n)$ & $1$ & $1$ & $0$ & \dots \\
   us to the second surprise of computability theory:
   \[ \textbf{2. } \textit{All models of computation are equivalent.} \]
   
-  \subsection{``\pC\,'' Programs}
+  \subsection{$\mathcal{C}$ Programs}
   The first surprise of computability theory is that only a few rules
   are required to acheive the full power of computation. We demonstrate
   that in this chapter. \n
 
-  The syntax of our first model is very simple. All programs have the 
+  Writing $\mathcal{C}$ programs is very simple. All programs have the 
   following form: 
   \begin{itemize}
       \item Each take a fixed number of inputs $x_1, x_2, \dots, x_k$,
@@ -298,32 +304,141 @@ $f_2(n)$ & $1$ & $1$ & $0$ & \dots \\
                 whence $\dec{v})_{v=0} = 0$.
           \end{enumerate}
       \item The description of a program is a sequence of instructions,
-            which is either an operation on a variable or the following
-            conditional branch:
+            which is either an operation on a variable, a return statement (which
+            halts execution), or a conditional branch of the following form:
             \[ \text{If } v \neq 0 \text{, then go to instruction } n
             \text{. Else, continue.} \]
   \end{itemize}
+  This turns out to be all we need.  \n
+  
   Suppose we want to write a program that copies one variable to another. We would also like the
-  input data to be unaltered at the end of the program. Given that all way can do is increment and 
+  input data to be unaltered at the end of the program. Now is a good time to pause and think about
+  how you would do this. \n
+  
+  
+  Given that all way can do is increment and 
   decrement, we will have to modify the input data as we copy it. The way we ensure it is unaltered
   at the end of the program is by also storing its value into a temporary variable, and then
   copying it back. Observe,
   \begin{lstlisting}
  copy(x, y, z) {
+     if (x != 0)
+         goto 5
+     return
      dec(x)
      inc(y)
      inc(z)
      if (x != 0)
-         goto 2
-     dec(y)
+         goto 5
      dec(z)
      inc(x)
      if (z != 0)
          goto 8
-     dec(x)
+     return
  }
   \end{lstlisting}
-  \subsection{Turing Machines}
+  Visualizing the computation is a lot like debugging with \texttt{GDB}. We can view the execution of
+  \texttt{copy(10, y, z)}, by listing each instruction with the state of memory on the right
+   \begin{lstlisting}
+   copy(10, y, z)     ||   (x, y, z) = (10, 0, 0)
+   if (x != 0)        ||         10 != 0 is true
+       goto 5
+   dec(x)             ||   (x, y, z) =  (9, 0, 0)
+   inc(y)             ||   (x, y, z) =  (9, 1, 0)
+   inc(z)             ||   (x, y, z) =  (9, 1, 1)
+   if (x != 0)        ||          9 != 0 is true 
+       goto 2         ||
+   ...
+   dec(x)             ||   (x, y, z) = (1, 9, 9)
+   inc(y)             ||   (x, y, z) = (0, 10, 9)
+   inc(z)             ||   (x, y, z) = (0, 10, 10)
+   if (x != 0)        ||          0 != 0 is false
+   dec(z)             ||   (x, y, z) = (0, 10, 9)
+   inc(x)             ||   (x, y, z) = (1, 10, 9)
+   if (z != 0)        ||          9 != 0 is true
+       goto 8         ||
+   ...
+   dec(z)             ||   (x, y, z) = (9, 10, 0)
+   inc(x)             ||   (x, y, z) = (10, 10, 0)
+   if (z != 0)        ||          0 != 0 is false
+   return
+   \end{lstlisting}
+      
+  \subsection{Turing Machines} 
+  We are ready to study our second model of computation: the Turing Machine (TM). \n
+   
+  %% Draw TM 
+  \begin{tikzpicture}[baseline=-250]
+      \edef\sizetape{0.7cm}
+      \tikzstyle{every path}=[very thick]
+      \tikzstyle{tmtape}=[draw, minimum size=\sizetape]
+      \tikzstyle{tmhead}=[arrow box, draw, minimum size=0.5cm, arrow box
+      arrows={east:0.25cm, west:0.25cm}]
+      
+      \begin{scope}[start chain=1 going right, node distance=-0.15mm]
+          \node [on chain=1, tmtape, draw=none] {$\ldots$};
+          \node [on chain=1, tmtape] {};
+          \node [on chain=1, tmtape] {0};
+          \node [on chain=1, tmtape] {1};
+          \node [on chain=1, tmtape] {0};
+          \node [on chain=1, tmtape] (input) {1};
+          \node [on chain=1, tmtape] {1};
+          \node [on chain=1, tmtape] {1};
+          \node [on chain=1, tmtape] {0};
+          \node [on chain=1, tmtape] {};
+          \node [on chain=1, tmtape, draw=none] {$\ldots$};
+      \end{scope}
+
+      \begin{scope}
+          [shift={(3cm,-5cm)},start chain=circle placed {at=(-\tikzchaincount*60:1.5)}]
+          \foreach \i in {q_1, q_2,  \vdots, q_h, \ddots, q_n}
+              \node [on chain] {$\i$};
+          \node (center) {};
+          \draw[->] (center) -- (circle-2);
+          \node[rounded corners,draw=black,thick,fit=(circle-1) (circle-2) (circle-3) 
+                   (circle-4) (circle-5) (circle-6), label=below:\textbf{Finite Control}] (fsbox) {};
+      \end{scope}
+      
+      
+    %% Draw TM head below (input) tape cell
+\node [tmhead,yshift=-.3cm] at (input.south) (head) {$q_2$};
+
+%% Link Finite Control with Head
+\path[->,draw] (fsbox.north) .. controls (4.5,-1) and (0,-2) .. node[right] 
+			(headlinetext)
+ 			{} 
+			(head.south);
+  \end{tikzpicture}
+  \parbox[b]{8cm}{
+   We assume the reader has encountered TM's before, and has studied its use as a language
+   recognizer. We will use the following notation to define TM's:
+     \begin{definition}
+      A {\bf Turing Machine} (TM) is defined by the five tuple \( (Q, q_0, q_h, \Sigma, \Gamma, \delta) \),
+      where $Q$ is a finite set of states, $q_0 \in Q$ is the {\it initial state}, $q_h$ is the {\it halt state}, $\Sigma$
+      is the input alphabet, $\Gamma$ is the tape alphabet, and 
+      $\delta : Q \times \Gamma \rightarrow Q \times \Gamma \times DIR$ is the transition function, where
+      \(\delta( q, \sigma) = (q', \sigma', D) \) means
+      that reading the character $\sigma$ while at state $q$ causes the machine
+      to replace $\sigma$ with $\sigma'$ and transition to state $q'$, and
+      move the reading head one step in the direction $D$. \n
+      $DIR$ is the set $\{LEFT, RIGHT\}$. \n
+      The machine halts execution if it reaches state $q_h$.
+  \end{definition}
+}
+
+ Alan Turing, the inventor of the TM, writes in his seminal paper of 1936 , 
+ \begin{quote}We may compare a man in the process of computing \!...\!\! to a
+                        machine which is only capable of a finite number of conditions,
+                        $q_1, ..., q_n$, which will be called $m$-configurations.
+                         The machine is supplied with a
+                       ``tape'' (the analogue of paper) [...] divided into sections 
+                       (called ``squares'') each capable of bearing a ``symbol''.
+\end{quote}
+Since their behavior at any point is completely determined  by the
+current state and current symbol being read, Turing called them 
+automatic machines. 
+
+
   \subsection{$\mu$-Recursive Functions}
   \subsection{Church-Turing Thesis}
   \end{document}
